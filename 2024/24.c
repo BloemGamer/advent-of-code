@@ -87,7 +87,7 @@ void fill_data(void)
 		*(data.instructions + j) = searchAndReplace(*(data.instructions + j), "OR", "|");
 		*(data.instructions + j) = searchAndReplace(*(data.instructions + j), " ", "");
 	}
-	data.answers = calloc(data.amount_instructions + 1, sizeof(char));
+	data.answers = calloc(data.amount_instructions + 1, sizeof(unsigned long long));
 }
 // y06&x06->pqj
 void run(void)
