@@ -26,6 +26,11 @@ In the `./libraries/documatation` you can find the documentation for all my libr
 
 _If there isn't a documentation for the library yet, I'm going to write it at a later date._
 
+### Bloem (`bloem`)
+
+Contains some file functions.
+
+
 ### Adventofcode (`advent of code`)
 
 Contains standard functions used for Advent of code.
