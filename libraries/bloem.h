@@ -1,5 +1,12 @@
 //6.0
 
+/*
+This file has no copyright assigned
+But please give credit to the original creater (at the moment the official copy
+of this library is located at "https://github.com/BloemGamer/advent-of-code/blob/main/libraries/bloem.h")
+Feel free to use this library and change some things for personal use
+*/
+
 #ifndef BLOEM_H
 #define BLOEM_H
 
