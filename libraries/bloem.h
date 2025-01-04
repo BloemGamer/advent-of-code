@@ -10,25 +10,22 @@
 #include <stdbool.h>
 
 #if defined(WIN32) || defined(_WIN32) 
-    #define PATH_SEPARATOR '\\' 
+	#define PATH_SEPARATOR '\\' 
 #else 
-    #define PATH_SEPARATOR '/'
-    #define __max(a,b) (((a) > (b)) ? (a) : (b))
-    #define __min(a,b) (((a) < (b)) ? (a) : (b))
+	#define PATH_SEPARATOR '/'
+	#define __max(a,b) (((a) > (b)) ? (a) : (b))
+	#define __min(a,b) (((a) < (b)) ? (a) : (b))
 #endif 
 
-#ifndef FIX_FILE_STR_LENGTH
-    #define FIX_FILE_STR_LENGTH 256
-#endif
 #ifndef FILE_READ_AMOUNT
-    #define FILE_READ_AMOUNT 4096
+	#define FILE_READ_AMOUNT 4096
 #endif
 
 
 struct filecontent
 {
-    char **file;
-    size_t amountlines;
+	char **file;
+	size_t amountlines;
 	size_t *lengthlines;
 };
 

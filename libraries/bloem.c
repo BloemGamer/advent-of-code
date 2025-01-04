@@ -84,15 +84,16 @@ struct filecontent readfile(const char *filename)
 
 void fix_file(char *argv[], const char *whichfile)
 {	
-	char filenametest1[FIX_FILE_STR_LENGTH];
-	char filenametest2[FIX_FILE_STR_LENGTH];
-	char filenamemain[FIX_FILE_STR_LENGTH];
-	char path_until_now[FIX_FILE_STR_LENGTH];
+	char filenametest1[FILENAME_MAX];
+	char filenametest2[FILENAME_MAX];
+	char filenamemain[FILENAME_MAX];
+	char path_until_now[FILENAME_MAX];
+
 
 	strcpy(path_until_now, fix_path_until_now(argv));
 
 	char *filename = make_file_name(argv);
-	char directory[FIX_FILE_STR_LENGTH];
+	char directory[FILENAME_MAX];
 	sprintf(directory, "%stxt", path_until_now);
 	make_directory(directory);
 
@@ -128,12 +129,12 @@ void fix_file(char *argv[], const char *whichfile)
 
 char *make_file_name(char *argv[])
 {
-	char argvfile[FIX_FILE_STR_LENGTH];
+	char argvfile[FILENAME_MAX];
 	char *filename_ptr;
 	char *filename;
 	size_t last_separator;
 
-	assert(!(strlen(argv[0]) > FIX_FILE_STR_LENGTH));
+	assert(!(strlen(argv[0]) > FILENAME_MAX));
 
 	strcpy(argvfile, argv[0]);
 	for(size_t i = 0; i < strlen(*argv); i++)
@@ -181,10 +182,10 @@ void make_debug_file(char *argv[], char **string, char *filename)
 {
 	FILE *file_ptr;
 	unsigned long long i = 0;
-	char filename_debug[FIX_FILE_STR_LENGTH];
-	char path_until_now[FIX_FILE_STR_LENGTH];
+	char filename_debug[FILENAME_MAX];
+	char path_until_now[FILENAME_MAX];
 	strcpy(path_until_now, fix_path_until_now(argv));
-	char debug_dir[FIX_FILE_STR_LENGTH];
+	char debug_dir[FILENAME_MAX];
 	sprintf(debug_dir, "%sdebug", path_until_now);
 	make_directory(debug_dir);
 	sprintf(filename_debug, "%s%c%s.txt", debug_dir, PATH_SEPARATOR, filename);
@@ -208,9 +209,9 @@ void make_directory(const char *name)
 {
 	int number;
 	#if defined(WIN32) || defined(_WIN32) 
-    number = _mkdir(name);
+	number = _mkdir(name);
 	#else
-    number = mkdir(name, 0777);
+	number = mkdir(name, 0777);
 	#endif
 	if(number == 0)
 	{
@@ -220,10 +221,10 @@ void make_directory(const char *name)
 
 char *fix_path_until_now(char *argv[])
 {
-	char filename_with_executable[FIX_FILE_STR_LENGTH];
+	char filename_with_executable[FILENAME_MAX];
 	char *filename = make_file_name(argv);
 	char *path_until_now;
-	path_until_now = (char*)calloc(FIX_FILE_STR_LENGTH, sizeof(char));
+	path_until_now = (char*)calloc(FILENAME_MAX, sizeof(char));
 
 	#if defined(WIN32) || defined(_WIN32)
 		sprintf(filename_with_executable, "%s%s", filename, ".exe");
