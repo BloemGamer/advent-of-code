@@ -40,6 +40,14 @@ void print_binary(void *n, size_t size, bool with_zero)
 		printf("%u", (*(long long unsigned*)n & (long long unsigned)1 << size) >> size--);
 }
 
+bool in_bounds(long long y, long long min_y, long long max_y, long long dif_y, long long x, long long min_x, long long max_x, long long dif_x)
+{
+	if(y + dif_y >= min_y && y + dif_y <= max_y && x + dif_x >= min_x && x + dif_x <= max_x)
+		return true;
+	else
+		return false;
+}
+
 long long unsigned str_to_llu(char *vstring)
 {
 	long long unsigned i = 0, number  = 0;
