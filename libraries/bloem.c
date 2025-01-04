@@ -96,9 +96,9 @@ void fix_file(char *argv[], const char *whichfile)
 	sprintf(directory, "%stxt", path_until_now);
 	make_directory(directory);
 
-	sprintf(filenametest1, "%stxt%c%s.test1.txt", path_until_now, PATH_SEPARATOR, filename);
-	sprintf(filenametest2, "%stxt%c%s.test2.txt", path_until_now, PATH_SEPARATOR, filename);
-	sprintf(filenamemain, "%stxt%c%s.txt", path_until_now, PATH_SEPARATOR, filename);
+	sprintf(filenametest1, "%stxt%s.test1.txt", path_until_now, filename);
+	sprintf(filenametest2, "%stxt%s.test2.txt", path_until_now, filename);
+	sprintf(filenamemain, "%stxt%s.txt", path_until_now, filename);
 	
 	make_file(argv, filenametest1);
 	make_file(argv, filenametest2);
