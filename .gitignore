@@ -12,3 +12,5 @@ standard_functions
 *.o
 test
 debug
+*.pyc
+__pycache__
