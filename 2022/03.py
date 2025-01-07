@@ -12,8 +12,8 @@ def main() -> None:
 	print("Part 1:", answer)
 
 	answer = 0
-	for i in range(int(len(file) / 3)):
-		answer += priority(on_three_elves(file[3 * i], file[3 * i + 1], file[3 * i + 2]))
+	for i in range(0, len(file), 3):
+		answer += priority(on_three_elves(file[i], file[i + 1], file[i + 2]))
 	print("Part 2:", answer)
 
 def in_both_compartments(bag: str) -> str:
