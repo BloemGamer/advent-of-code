@@ -1,6 +1,6 @@
 import io, os
 
-def readfile(file, what: str = "M") -> list[str]:
+def fix_file(file, what: str = "M") -> list[str]:
 	day= file.split(os.sep)[-1].replace('.py', '')
 	dir = os.path.dirname(os.path.realpath(file)) + os.sep
 	filename = dir + "txt" + os.sep + day + ".txt"

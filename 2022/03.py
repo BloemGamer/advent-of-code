@@ -5,7 +5,7 @@ from adventofcode import *
 
 def main() -> None:
 	global file
-	file = readfile(__file__, "M")
+	file = fix_file(__file__, "M")
 	answer: int = 0
 	for f in file:
 		answer += priority(in_both_compartments(f))
