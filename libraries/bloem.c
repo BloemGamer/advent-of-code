@@ -126,7 +126,7 @@ void fix_file(char *argv[], const char *whichfile)
 
 	if(strlen(path_until_now) + strlen(filename) + strlen("txt.testx.txt") >= FILENAME_MAX)
 	{
-		fprintf(stderr, "Filename");
+		fprintf(stderr, filename);
 		assert(false);
 	}
 	sprintf(filenametest1, "%stxt%s.test1.txt", path_until_now, filename);
