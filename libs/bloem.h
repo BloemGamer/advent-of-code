@@ -15,6 +15,7 @@ Feel free to use this library and change some things for personal use
 #endif /* __GNUC__ */
 
 #include <stdbool.h>
+#include <stdlib.h>
 
 #if defined(WIN32) || defined(_WIN32) 
 	#define PATH_SEPARATOR '\\' 
