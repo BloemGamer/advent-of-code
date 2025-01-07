@@ -5,6 +5,7 @@
 #include <string.h>
 #include <assert.h>
 #include <stdbool.h>
+#include <errno.h>
 #if defined(WIN32) || defined(_WIN32) 
 	#include <direct.h>
 #else
@@ -131,6 +132,11 @@ void fix_file(char *argv[], const char *whichfile)
 	sprintf(directory, "%stxt", path_until_now);
 	make_directory(directory);
 
+	if(strlen(path_until_now) + strlen(filename) + strlen("txt.testx.txt") >= FILENAME_MAX)
+	{
+		fprintf(stderr, "Filename");
+		assert(false);
+	}
 	sprintf(filenametest1, "%stxt%s.test1.txt", path_until_now, filename);
 	sprintf(filenametest2, "%stxt%s.test2.txt", path_until_now, filename);
 	sprintf(filenamemain, "%stxt%s.txt", path_until_now, filename);
@@ -156,7 +162,8 @@ void fix_file(char *argv[], const char *whichfile)
 	}
 	else
 	{
-		assert(false && "Not a valid input");
+		fprintf("Not a valid input\n");
+		assert(false);
 	}
 }
 
