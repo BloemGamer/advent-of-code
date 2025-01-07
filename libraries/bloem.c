@@ -162,7 +162,7 @@ void fix_file(char *argv[], const char *whichfile)
 	}
 	else
 	{
-		fprintf("Not a valid input\n");
+		fprintf(stderr, "Not a valid input\n");
 		assert(false);
 	}
 }
