@@ -22,7 +22,7 @@ struct filecontent readfile(const char *filename)
 	file_ptr = fopen(filename, "r");
 	if(file_ptr == NULL)
 	{
-		fprintf(stderr, "Could not open file \"%s\"\n", filename);
+		perror(filename);
  		assert(false);
 	}
 	char str[FILE_READ_AMOUNT];
@@ -35,10 +35,9 @@ struct filecontent readfile(const char *filename)
 	while(true)
 	{
 		size_t res = fread(buffer, 1, FILE_READ_AMOUNT, file_ptr);
-		// assert(!(ferror(file_ptr)));
 		if(ferror(file_ptr))
 		{
-			fprintf(stderr, "Error with reading \"%s\"", filename);
+			perror(filename);
 			assert(false);
 		}
 		for(size_t i = 0; i < res; i++)
@@ -56,19 +55,15 @@ struct filecontent readfile(const char *filename)
 
 	if((readfile.file == NULL) || (readfile.lengthlines == NULL) || (tmp == NULL))
 	{
-		fprintf(stderr, "Not enough memory\n");
+		perror("");
 		assert(false);
 	}
-
-	// assert(!(readfile.file == NULL));
-	// assert(!(readfile.lengthlines == NULL));s
-	// assert(!(tmp == NULL));
 
 	while(fgets(str, FILE_READ_AMOUNT, file_ptr) != NULL)
 	{
 		if(ferror(file_ptr))
 		{
-			fprintf(stderr, "Error with reading \"%s\"", filename);
+			perror(filename);
 			assert(false);
 		}
 		if((str[strlen(str) - 1]) != '\n')
@@ -78,7 +73,7 @@ struct filecontent readfile(const char *filename)
 				tmp = (char*)realloc(tmp, FILE_READ_AMOUNT * (current_buffer_count + 1) * sizeof(char));
 				if(tmp == NULL)
 				{
-					fprintf(stderr, "Not enough memory\n");
+					perror("");
 					assert(false);
 				}
 			}
@@ -91,10 +86,9 @@ struct filecontent readfile(const char *filename)
 			max_buffer_count = __max(max_buffer_count, current_buffer_count);
 			strcat(tmp, str);
 			*(readfile.file + current_line) = (char*)malloc(strlen(tmp) * sizeof(char));
-			// assert(!(*(readfile.file + current_line) == NULL));
 			if(*(readfile.file + current_line) == NULL)
 			{
-				fprintf(stderr, "Not enough memory\n");
+				perror("");
 				assert(false);
 			}
 			readfile.lengthlines[current_line] = strlen(tmp);
@@ -107,11 +101,10 @@ struct filecontent readfile(const char *filename)
 	*(readfile.file + current_line) = (char*)malloc(strlen(tmp) * sizeof(char));
 	if(*(readfile.file + current_line) == NULL)
 	{
-		fprintf(stderr, "Not enough memory\n");
+		perror("");
 		assert(false);
 	}
 	readfile.lengthlines[current_line] = strlen(tmp);
-	// assert(!(*(readfile.file + current_line) == NULL));
 	strcpy(*(readfile.file + current_line), tmp);
 
 	return readfile;
@@ -123,7 +116,6 @@ void fix_file(char *argv[], const char *whichfile)
 	char filenametest2[FILENAME_MAX];
 	char filenamemain[FILENAME_MAX];
 	char path_until_now[FILENAME_MAX];
-
 
 	strcpy(path_until_now, fix_path_until_now(argv));
 
