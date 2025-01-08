@@ -11,10 +11,12 @@
 #include <inttypes.h>
 
 #include "adventofcode.h"
-#include "queue.c"
-#include "debug.c"
-#include "bloem.c"
-#include "hash.c"
+// #include "queue.c"
+// #include "debug.c"
+// #include "bloem.c"
+// #include "hash.c"
+
+int directions[2][8] = {{1, -1, 0, 0, 1, 1, -1, -1}, {0, 0, 1, -1, 1, -1, 1, -1}};
 
 
 void run_parts(clock_t begin)

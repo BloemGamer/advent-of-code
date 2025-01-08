@@ -7,7 +7,7 @@
 #include <stdbool.h>
 #include <stdarg.h>
 
-#include "../libraries/debug.h"
+#include "debug.h"
 
 int debug_print(bool on,const char *str, ...)
 {

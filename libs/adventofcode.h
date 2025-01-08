@@ -18,7 +18,7 @@
 #include "debug.h"
 #include "hash.h"
 
-int directions[2][8] = {{1, -1, 0, 0, 1, 1, -1, -1}, {0, 0, 1, -1, 1, -1, 1, -1}};
+extern int directions[2][8];
 
 extern void run_parts(clock_t begin);
 void print_binary(void *n, size_t size, bool with_zero);

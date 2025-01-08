@@ -14,6 +14,8 @@
 
 #include "bloem.h"
 
+struct filecontent file;
+
 
 struct filecontent readfile(const char *filename)
 {
@@ -137,17 +139,17 @@ void fix_file(char *argv[], const char *whichfile)
 	make_file(argv, filenametest2);
 	make_file(argv, filenamemain);
 
-	if(whichfile == "T1")
+	if(!strcmp(whichfile, "T1"))
 	{
 		printf("\nReading form \"%s\"\n", filenametest1);
 		file = readfile(filenametest1);
 	}
-	else if(whichfile == "T2")
+	else if(!strcmp(whichfile, "T2"))
 	{
 		printf("\nReading form \"%s\"\n", filenametest2);
 		file = readfile(filenametest2);
 	}
-	else if(whichfile == "M")
+	else if(!strcmp(whichfile, "M"))
 	{
 		printf("\nReading form \"%s\"\n", filenamemain);
 		file = readfile(filenamemain);

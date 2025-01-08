@@ -37,7 +37,7 @@ struct filecontent
 	size_t *lengthlines;
 };
 
-struct filecontent file;
+extern struct filecontent file;
 
 
 extern struct filecontent readfile(const char *filename);

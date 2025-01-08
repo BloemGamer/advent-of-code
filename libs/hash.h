@@ -13,9 +13,9 @@ struct Data_Item
 	long long key;
 };
 
-struct Data_Item *hash_array[HASH_SIZE];
-struct Data_Item *dummy_item;
-struct Data_Item *item;
+extern struct Data_Item *hash_array[HASH_SIZE];
+extern struct Data_Item *dummy_item;
+extern struct Data_Item *item;
 
 long long hash_code(long long key);
 struct Data_Item *hash_search(long long key);
