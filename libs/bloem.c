@@ -87,7 +87,7 @@ struct filecontent readfile(const char *filename)
 			str[strlen(str) - 1] = 0;
 			max_buffer_count = __max(max_buffer_count, current_buffer_count);
 			strcat(tmp, str);
-			*(readfile.file + current_line) = (char*)malloc(strlen(tmp) * sizeof(char));
+			*(readfile.file + current_line) = (char*)malloc((strlen(tmp) + 1) * sizeof(char));
 			if(*(readfile.file + current_line) == NULL)
 			{
 				perror("");
@@ -100,7 +100,7 @@ struct filecontent readfile(const char *filename)
 			current_line++;
 		}	
 	}
-	*(readfile.file + current_line) = (char*)malloc(strlen(tmp) * sizeof(char));
+	*(readfile.file + current_line) = (char*)malloc((strlen(tmp) + 1) * sizeof(char));
 	if(*(readfile.file + current_line) == NULL)
 	{
 		perror("");
