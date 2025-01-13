@@ -167,7 +167,7 @@ char *make_file_name(char *argv[])
 	char argvfile[FILENAME_MAX];
 	char *filename_ptr;
 	char *filename;
-	size_t last_separator;
+	size_t last_separator = 0;
 
 	assert(!(strlen(argv[0]) > FILENAME_MAX));
 
@@ -267,7 +267,7 @@ char *fix_path_until_now(char *argv[])
 		sprintf(filename_with_executable, "%s", filename);
 	#endif
 
-	size_t last_separator;
+	size_t last_separator = 0;
 	for(size_t i = 0; i < strlen(*argv); i++)
 	{
 		if(argv[0][i] == PATH_SEPARATOR)
