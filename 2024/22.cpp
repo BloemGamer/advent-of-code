@@ -4,6 +4,8 @@
 #include <thread>
 #include <unordered_map>
 
+filecontent file;
+
 unsigned long long prune_number = 0b1000000000000000000000000 - 0b1;
 long long *file_numbers;
 
@@ -24,9 +26,9 @@ int main(int argc, char **argv)
 	std::chrono::time_point<std::chrono::system_clock>start, end0, end1, end2;
 	start = std::chrono::system_clock::now();
 	
-	fix_file(argv, "M");
-	file_numbers = (long long*)calloc(file.amountlines + 1, sizeof(long long));
-	for(size_t i = 0; i < file.amountlines; i++)
+	file.fix_file(argv, "M");
+	file_numbers = (long long*)calloc(file.amount_lines + 1, sizeof(long long));
+	for(size_t i = 0; i < file.amount_lines; i++)
 		*(file_numbers + i) = atoll(file.file[i]);
 	price_change.reserve(5000);
 
@@ -55,7 +57,7 @@ void part1()
 {
 	long long answer = 0;
 
-	for(size_t i = 0; i < file.amountlines; i++)
+	for(size_t i = 0; i < file.amount_lines; i++)
 		answer += secret_number(file_numbers[i], i);
 
 	std::cout << "Part 1: " << answer << "\n";
@@ -118,7 +120,7 @@ long long max_bananas()
 long long run(long long number_win)
 {
 	long long answer = 0;
-	for(size_t j = 0; j < file.amountlines; j++)
+	for(size_t j = 0; j < file.amount_lines; j++)
 	{
 		if(diff_hash[j].find(number_win) != diff_hash[j].end())
 			answer += diff_hash[j][number_win];
