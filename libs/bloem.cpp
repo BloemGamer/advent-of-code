@@ -3,7 +3,7 @@
 #include <cstring>
 #include <memory>
 #include <filesystem>
-#include "filecontent.hpp"
+#include "bloem.h"
 
 #ifndef FILE_READ_AMOUNT
 	#define FILE_READ_AMOUNT 4096
