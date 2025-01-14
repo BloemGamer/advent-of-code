@@ -44,11 +44,11 @@ extern struct filecontent file;
 
 extern struct filecontent readfile(const char *filename);
 extern void fix_file(char *argv[], const char *whichfile);
-extern char *make_file_name(char *argv[]);
-extern void make_file(char *argv[], char filename[]);
+
+
 extern void make_debug_file(char *argv[], char **string, char *filename);
 extern void make_directory(const char *name);
-extern char *fix_path_until_now(char *argv[]);
+
 
 #else //__cplusplus
 

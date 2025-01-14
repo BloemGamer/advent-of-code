@@ -16,6 +16,9 @@
 
 struct filecontent file;
 
+char *make_file_name(char *argv[]);
+void make_file(char *argv[], char filename[]);
+char *fix_path_until_now(char *argv[]);
 
 struct filecontent readfile(const char *filename)
 {
