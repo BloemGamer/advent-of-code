@@ -5,10 +5,6 @@
 #include <filesystem>
 #include "bloem.h"
 
-#ifndef FILE_READ_AMOUNT
-	#define FILE_READ_AMOUNT 4096
-#endif
-
 
 void filecontent::readfile(const char* filename_)
 {

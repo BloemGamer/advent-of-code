@@ -22,14 +22,16 @@ Feel free to use this library and change some things for personal use
 	#define __min(a,b) (((a) < (b)) ? (a) : (b))
 #endif 
 
+#ifndef FILE_READ_AMOUNT
+	#define FILE_READ_AMOUNT 4096
+#endif
+
 #ifndef __cplusplus
 
 #include <stdbool.h>
 #include <stdlib.h>
 
-#ifndef FILE_READ_AMOUNT
-	#define FILE_READ_AMOUNT 4096
-#endif
+
 
 
 struct filecontent
