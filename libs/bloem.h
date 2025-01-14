@@ -14,9 +14,6 @@ Feel free to use this library and change some things for personal use
 	#warning "I haven't tested for this compiler"
 #endif /* __GNUC__ */
 
-#include <stdbool.h>
-#include <stdlib.h>
-
 #if defined(WIN32) || defined(_WIN32) 
 	#define PATH_SEPARATOR '\\' 
 #else 
@@ -24,6 +21,11 @@ Feel free to use this library and change some things for personal use
 	#define __max(a,b) (((a) > (b)) ? (a) : (b))
 	#define __min(a,b) (((a) < (b)) ? (a) : (b))
 #endif 
+
+#ifndef __cplusplus
+
+#include <stdbool.h>
+#include <stdlib.h>
 
 #ifndef FILE_READ_AMOUNT
 	#define FILE_READ_AMOUNT 4096
@@ -48,7 +50,35 @@ extern void make_debug_file(char *argv[], char **string, char *filename);
 extern void make_directory(const char *name);
 extern char *fix_path_until_now(char *argv[]);
 
+#else //__cplusplus
 
+#include <iostream>
+
+class filecontent
+{
+private:
+	bool has_file = false;
+	char const* filename;
+
+	char* make_file_name(char *argv[]);
+	void make_file(char *argv[], char* filename_);
+	char* fix_path_until_now(char *argv[]);
+public:
+	char** file;
+	size_t amount_lines = 0;
+	size_t* length_lines;
+
+	void readfile(const char* filename_);
+	size_t amountlines();
+	size_t lengthlines(size_t line = 0);
+	void fix_file(char *argv[], const char *whichfile = "M");
+	void make_directory(const char *name);
+	void make_debug_file(char *argv[], char** string, char *filename_);
+
+};
+
+
+#endif // __cplusplus
 
 
 #endif //BLOEM_H
