@@ -62,9 +62,9 @@ private:
 	bool has_file = false;
 	char const* filename;
 
-	char* make_file_name(char *argv[]);
-	void make_file(char *argv[], char* filename_);
-	char* fix_path_until_now(char *argv[]);
+	char* make_file_name(void);
+	void make_file( char* filename_);
+	char* fix_path_until_now(void);
 public:
 	char** file;
 	size_t amount_lines = 0;
@@ -73,12 +73,15 @@ public:
 	void readfile(const char* filename_);
 	size_t amountlines();
 	size_t lengthlines(size_t line = 0);
-	void fix_file(char *argv[], const char *whichfile = "M");
+	void fix_file(const char* whichfile = "M");
 	void make_directory(const char *name);
-	void make_debug_file(char *argv[], char** string, char *filename_);
+	void make_debug_file(char** string, char* filename_);
+	void reset_filecontent();
+	filecontent();
+	~filecontent();
 
 };
-
+void test();
 
 #endif // __cplusplus
 

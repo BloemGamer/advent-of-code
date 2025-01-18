@@ -26,7 +26,7 @@ int main(int argc, char **argv)
 	std::chrono::time_point<std::chrono::system_clock>start, end0, end1, end2;
 	start = std::chrono::system_clock::now();
 	
-	file.fix_file(argv, "M");
+	file.fix_file("M");
 	file_numbers = (long long*)calloc(file.amount_lines + 1, sizeof(long long));
 	for(size_t i = 0; i < file.amount_lines; i++)
 		*(file_numbers + i) = atoll(file.file[i]);

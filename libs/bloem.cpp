@@ -8,6 +8,8 @@
 
 void filecontent::readfile(const char* filename_)
 {
+	if(has_file)
+		reset_filecontent();
 	FILE* file_ptr;
 	struct filecontent readfile;
 	filename = filename_;
@@ -100,12 +102,14 @@ void filecontent::readfile(const char* filename_)
 	strcpy(*(file + current_line), tmp);
 	has_file = true;
 }
+
 size_t filecontent::amountlines()
 {
 	if(!has_file)
 		return 0;
 	return amount_lines;
 }
+
 size_t filecontent::lengthlines(size_t line)
 {
 	if(!has_file)
@@ -113,16 +117,16 @@ size_t filecontent::lengthlines(size_t line)
 	return length_lines[line];
 }
 
-void filecontent::fix_file(char* argv[], const char* whichfile)
+void filecontent::fix_file(const char* whichfile)
 {	
 	char filenametest1[FILENAME_MAX];
 	char filenametest2[FILENAME_MAX];
 	char filenamemain[FILENAME_MAX];
 	char path_until_now[FILENAME_MAX];
 
-	strcpy(path_until_now, fix_path_until_now(argv));
+	strcpy(path_until_now, fix_path_until_now());
 
-	char* filename_ = make_file_name(argv);
+	char* filename_ = make_file_name();
 	char directory[FILENAME_MAX];
 	sprintf(directory, "%stxt", path_until_now);
 	make_directory(directory);
@@ -136,9 +140,9 @@ void filecontent::fix_file(char* argv[], const char* whichfile)
 	sprintf(filenametest2, "%stxt%s.test2.txt", path_until_now, filename_);
 	sprintf(filenamemain, "%stxt%s.txt", path_until_now, filename_);
 	
-	make_file(argv, filenametest1);
-	make_file(argv, filenametest2);
-	make_file(argv, filenamemain);
+	make_file(filenametest1);
+	make_file(filenametest2);
+	make_file(filenamemain);
 
 	if(!strcmp(whichfile, "T1"))
 	{
@@ -163,22 +167,22 @@ void filecontent::fix_file(char* argv[], const char* whichfile)
 }
 
 
-char* filecontent::make_file_name(char* argv[])
+char* filecontent::make_file_name()
 {
 	char argvfile[FILENAME_MAX];
 	char* filename_ptr;
 	char* filename_;
 	size_t last_separator = 0;
 
-	assert(!(strlen(argv[0]) > FILENAME_MAX));
+	assert(!(strlen(*__argv) > FILENAME_MAX));
 
-	strcpy(argvfile, argv[0]);
-	for(size_t i = 0; i < strlen(*argv); i++)
+	strcpy(argvfile, *__argv);
+	for(size_t i = 0; i < strlen(*__argv); i++)
 	{
-		if(argv[0][i] == PATH_SEPARATOR)
+		if(__argv[0][i] == PATH_SEPARATOR)
 			last_separator = i;
 	}
-	filename_ptr = argv[0] + last_separator;
+	filename_ptr = *__argv + last_separator;
 	#if defined(WIN32) || defined(_WIN32) 
 	filename_ = (char*)calloc((strlen(filename_ptr) - 3), sizeof(char));
 	strncpy(filename_, filename_ptr, strlen(filename_ptr) - 4);
@@ -194,7 +198,7 @@ char* filecontent::make_file_name(char* argv[])
 
 
 
-void filecontent::make_file(char* argv[], char* filename_)
+void filecontent::make_file(char* filename_)
 {
 	FILE* file_ptr;
 	
@@ -214,13 +218,13 @@ void filecontent::make_file(char* argv[], char* filename_)
 	fclose(file_ptr);
 }
 
-void filecontent::make_debug_file(char* argv[], char** string, char* filename_)
+void filecontent::make_debug_file(char** string, char* filename_)
 {
 	FILE* file_ptr;
 	unsigned long long i = 0;
 	char filename_debug[FILENAME_MAX];
 	char path_until_now[FILENAME_MAX];
-	strcpy(path_until_now, fix_path_until_now(argv));
+	strcpy(path_until_now, fix_path_until_now());
 	char debug_dir[FILENAME_MAX];
 	sprintf(debug_dir, "%sdebug", path_until_now);
 	make_directory(debug_dir);
@@ -249,10 +253,10 @@ void filecontent::make_directory(const char* name)
 	}
 }
 
-char* filecontent::fix_path_until_now(char* argv[])
+char* filecontent::fix_path_until_now()
 {
 	char filename_with_executable[FILENAME_MAX];
-	char* filename_ = make_file_name(argv);
+	char* filename_ = make_file_name();
 	char* path_until_now;
 	path_until_now = (char*)calloc(FILENAME_MAX, sizeof(char));
 
@@ -263,11 +267,51 @@ char* filecontent::fix_path_until_now(char* argv[])
 	#endif
 
 	size_t last_separator = 0;
-	for(size_t i = 0; i < strlen(*argv); i++)
+	for(size_t i = 0; i < strlen(*__argv); i++)
 	{
-		if(argv[0][i] == PATH_SEPARATOR)
+		if(__argv[0][i] == PATH_SEPARATOR)
 			last_separator = i;
 	}
-	strncpy(path_until_now, *argv, last_separator + 1);
+	strncpy(path_until_now, *__argv, last_separator + 1);
 	return path_until_now;
+}
+
+filecontent::filecontent(void)
+{
+
+}
+
+filecontent::~filecontent(void)
+{
+	reset_filecontent();
+}
+
+void filecontent::reset_filecontent(void)
+{
+	if(has_file)
+	{
+		free(length_lines);
+		for(size_t i = 0; i < amount_lines; i++)
+			free(file[i]);
+		free(file);
+		amount_lines = 0;
+		has_file = false;
+	}
+}
+
+class bloem
+{
+private:
+	/* data */
+public:
+	bloem(/* args */);
+	~bloem();
+};
+
+bloem::bloem(/* args */)
+{
+}
+
+bloem::~bloem()
+{
 }
