@@ -55,16 +55,16 @@ extern void make_directory(const char *name);
 #else //__cplusplus
 
 #include <iostream>
+#include <filesystem>
 
 class filecontent
 {
 private:
 	bool has_file = false;
-	char const* filename;
+	std::filesystem::path filename;
+	
+	void make_file(char* filename_);
 
-	char* make_file_name(void);
-	void make_file( char* filename_);
-	char* fix_path_until_now(void);
 public:
 	char** file;
 	size_t amount_lines = 0;
@@ -72,7 +72,7 @@ public:
 
 	void read_file(const char* filename_);
 	void fix_file(const char* whichfile = "M");
-	void make_directory(const char *name);
+	void make_directory(const char* name);
 	void make_debug_file(char** string, char* filename_);
 	void reset_filecontent();
 	filecontent();
