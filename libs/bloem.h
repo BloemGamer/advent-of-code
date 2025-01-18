@@ -70,9 +70,7 @@ public:
 	size_t amount_lines = 0;
 	size_t* length_lines;
 
-	void readfile(const char* filename_);
-	size_t amountlines();
-	size_t lengthlines(size_t line = 0);
+	void read_file(const char* filename_);
 	void fix_file(const char* whichfile = "M");
 	void make_directory(const char *name);
 	void make_debug_file(char** string, char* filename_);
@@ -81,7 +79,7 @@ public:
 	~filecontent();
 
 };
-void test();
+
 
 #endif // __cplusplus
 

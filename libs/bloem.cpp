@@ -6,12 +6,12 @@
 #include "bloem.h"
 
 
-void filecontent::readfile(const char* filename_)
+void filecontent::read_file(const char* filename_)
 {
 	if(has_file)
 		reset_filecontent();
 	FILE* file_ptr;
-	struct filecontent readfile;
+	struct filecontent read_file;
 	filename = filename_;
 	file_ptr = fopen(filename, "r");
 	if(file_ptr == NULL)
@@ -103,20 +103,6 @@ void filecontent::readfile(const char* filename_)
 	has_file = true;
 }
 
-size_t filecontent::amountlines()
-{
-	if(!has_file)
-		return 0;
-	return amount_lines;
-}
-
-size_t filecontent::lengthlines(size_t line)
-{
-	if(!has_file)
-		return 0;
-	return length_lines[line];
-}
-
 void filecontent::fix_file(const char* whichfile)
 {	
 	char filenametest1[FILENAME_MAX];
@@ -147,17 +133,17 @@ void filecontent::fix_file(const char* whichfile)
 	if(!strcmp(whichfile, "T1"))
 	{
 		printf("\nReading form \"%s\"\n", filenametest1);
-		readfile(filenametest1);
+		read_file(filenametest1);
 	}
 	else if(!strcmp(whichfile, "T2"))
 	{
 		printf("\nReading form \"%s\"\n", filenametest2);
-		readfile(filenametest2);
+		read_file(filenametest2);
 	}
 	else if(!strcmp(whichfile, "M"))
 	{
 		printf("\nReading form \"%s\"\n", filenamemain);
-		readfile(filenamemain);
+		read_file(filenamemain);
 	}
 	else
 	{
@@ -299,19 +285,3 @@ void filecontent::reset_filecontent(void)
 	}
 }
 
-class bloem
-{
-private:
-	/* data */
-public:
-	bloem(/* args */);
-	~bloem();
-};
-
-bloem::bloem(/* args */)
-{
-}
-
-bloem::~bloem()
-{
-}
