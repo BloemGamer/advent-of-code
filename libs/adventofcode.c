@@ -39,7 +39,7 @@ void print_binary(void *n, size_t size, bool with_zero)
 		while(((*(long long unsigned*)n & ((long long unsigned)1 << size)) == 0) && (size > 0))
 			size--;
 	while(size + 1 >= 1)
-		printf("%u", (*(long long unsigned*)n & (long long unsigned)1 << size) >> size--);
+		printf("%llu", (*(long long unsigned*)n & (long long unsigned)1 << size) >> size--);
 }
 
 bool in_bounds(long long y, long long min_y, long long max_y, long long dif_y, long long x, long long min_x, long long max_x, long long dif_x)
@@ -151,7 +151,7 @@ char *searchAndReplace(char *text, char *search, char *replace)
 	char *modText = NULL;
 
 	buffer[0] ='\0';
-	while ( ptr = strstr(text, search) )
+	while((ptr = strstr(text, search)))
 	{
 		strncat(buffer, text, ptr - text);
 		strcat(buffer, replace);
