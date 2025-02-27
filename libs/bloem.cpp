@@ -10,7 +10,7 @@ void filecontent::read_file(const char* filename_)
 	if(has_file)
 		reset_filecontent();
 	FILE* file_ptr;
-	struct filecontent read_file;
+	// struct filecontent read_file;
 	filename = filename_;
 	file_ptr = fopen(filename.string().c_str(), "r");
 	if(file_ptr == NULL)
@@ -124,7 +124,7 @@ void filecontent::fix_file(const char* whichfile)
 
 	if(strlen(path_until_now) + strlen(filename_) + strlen("txt.testx.txt") >= FILENAME_MAX)
 	{
-		fprintf(stderr, filename_);
+		fprintf(stderr, "%s", filename_);
 		assert(false);
 	}
 	sprintf(filenametest1, "%stxt%c%s.test1.txt", path_until_now, PATH_SEPARATOR, filename_);
