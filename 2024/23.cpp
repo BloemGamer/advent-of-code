@@ -13,25 +13,8 @@ struct Lan_Party
         char c[2];
     }a, b, c;
     
-    bool operator==(const Lan_Party& other) const
-    {
-        return a.i == other.a.i && b.i == other.b.i && c.i == other.c.i;
-    }
 };
 
-namespace std
-{
-    template <>
-    struct hash<Lan_Party>
-    {
-        size_t operator()(const Lan_Party& lp) const
-        {
-            return (std::hash<uint8_t>{}(lp.a.i) ^
-                    (std::hash<uint8_t>{}(lp.b.i) << 1) ^
-                    (std::hash<uint8_t>{}(lp.c.i) << 2));
-        }
-    };
-}
 
 struct Connection
 {
@@ -45,7 +28,6 @@ struct Connection
 
 
 std::vector<Lan_Party> parties;
-std::unordered_map<Lan_Party, Lan_Party> p;
 
 struct Connection* connections;
 
@@ -176,7 +158,6 @@ void fix_data(void)
         connections[(i*2)+1].a.c[0] = file.file[i][3];
         connections[(i*2)+1].a.c[1] = file.file[i][4];
 
-        // std::cout << connections[i].a.c[0] << connections[i].a.c[1] << connections[i].b.c[0] << connections[i].b.c[1] << "\n";
     }
     struct Lan_Party tmp;
     uint16_t c0, c1;
@@ -192,25 +173,13 @@ void fix_data(void)
                 c0 = connections[i].b.i;
                 c1 = connections[j].b.i;
             }
-            else if(connections[i].a.i == connections[j].b.i)
-            {
-                tmp.a.i = connections[i].a.i;
-                tmp.b.i = connections[i].b.i;
-                tmp.c.i = connections[j].a.i;
-                c0 = connections[i].b.i;
-                c1 = connections[j].a.i;
-            }
             else 
                 continue;
             
             for(size_t k = j + 1; k < file.amount_lines * 2; k++)
             {
-                    if((connections[k].a.i == c0 && connections[k].b.i == c1) /*|| (connections[k].b.i == c0 && connections[k].a.i == c1)*/)   
-                        if(p.find(tmp) == p.end())
-                        {
-                            p[tmp] = tmp;
-                            parties.push_back(tmp);
-                        }
+                    if((connections[k].a.i == c0 && connections[k].b.i == c1))  
+                        parties.push_back(tmp);
             }
         }
     }
