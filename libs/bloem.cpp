@@ -112,7 +112,10 @@ void filecontent::fix_file(const char* whichfile)
 	char directory[FILENAME_MAX];
 
 	strcpy(path_until_now, filename.parent_path().string().c_str());
-	strcat(path_until_now, "\\");
+	{
+		char tmp[2] = { (char) PATH_SEPARATOR, '\0' };
+		strcat(path_until_now, tmp);
+	}
 	#if defined(WIN32) || defined(_WIN32) 
 		strncpy(filename_, filename.filename().string().c_str(), strlen(filename.filename().string().c_str()) - 4);
 	#else
@@ -216,7 +219,14 @@ void filecontent::make_directory(const char* name)
 
 filecontent::filecontent(void)
 {
-	filename.replace_filename(*__argv);
+#if defined(WIN32) || defined(_WIN32) 
+    filename.replace_filename(*__argv);
+#endif
+}
+
+void filecontent::give_argv(char** _argv)
+{
+	filename.replace_filename(*_argv);
 }
 
 filecontent::~filecontent(void)

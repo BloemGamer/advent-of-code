@@ -75,7 +75,8 @@ public:
 	void make_directory(const char* name);
 	void make_debug_file(char** string, char* filename_);
 	void reset_filecontent();
-	filecontent();
+    void give_argv(char** _argv);
+	filecontent(void);
 	~filecontent();
 
 };
