@@ -1,6 +1,7 @@
-#include "../libs/bloem.h"
+#include "../libs/old/bloem.h"
 #include <iostream>
 #include <chrono>
+#include <climits>
 #include <thread>
 #include <unordered_map>
 
@@ -25,7 +26,7 @@ int main(int argc, char **argv)
 {
 	std::chrono::time_point<std::chrono::system_clock>start, end0, end1, end2;
 	start = std::chrono::system_clock::now();
-	
+	file.give_argv(argv);
 	file.fix_file("M");
 	file_numbers = (long long*)calloc(file.amount_lines + 1, sizeof(long long));
 	for(size_t i = 0; i < file.amount_lines; i++)
@@ -98,15 +99,15 @@ long long secret_number(long long number, size_t line)
 
 long long max_bananas()
 {
-	long long answer = 0;
-	int prices;
-	
-	for(int d0 = -9; d0 <= 9; d0++)
-	{
-		for(int d1 = -9; d1 <= 9; d1++)
-			for(int d2 = -9; d2 <= 9; d2++)
-				for(int d3 = -9; d3 <= 9; d3++)	
-				{
+    long long answer = 0;
+    int prices;
+
+    for(int d0 = -9; d0 <= 9; d0++)
+    {
+        for(int d1 = -9; d1 <= 9; d1++)
+            for(int d2 = -9; d2 <= 9; d2++)
+                for(int d3 = -9; d3 <= 9; d3++)	
+                {
 					prices = make_win_number(d0, d1, d2, d3);
 					if(price_change.find(prices) == price_change.end())
 						continue;
