@@ -14,3 +14,4 @@ test
 debug
 *.pyc
 __pycache__
+*.sh
