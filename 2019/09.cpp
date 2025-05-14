@@ -11,7 +11,7 @@ std::vector<long long> v;
 std::string s;
 int main()
 {
-    getline((std::ifstream("/media/sem/D/programmeren/advent-of-code/2019/txt/09.txt")),s);
+    getline((std::ifstream("txt/09.txt")),s);
 
     fn[1]=[](){v[p3]=v[p1]+v[p2];i+=4;};
     fn[2]=[](){v[p3]=v[p1]*v[p2];i+=4;};
