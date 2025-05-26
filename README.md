@@ -30,10 +30,6 @@ This year is the first year I'm starting when it releases.
 
 ## Libraries
 
-In the `./libraries/documatation` you can find the documentation for all my libraries.
-
-_If there isn't a documentation for the library yet, I'm probably going to write it at a later date if the library is interesting enough._
-
 ### Bloem (`bloem`)
 
 Contains some file functions.
