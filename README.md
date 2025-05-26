@@ -10,6 +10,10 @@ _There is a possibility that some day's don't work anymore because I updated the
 
 I started this year because of this year had some intcode puzzles, and I wanted to try them.
 
+## 2021
+
+I started this year to begin do python, some of the days will be done with C/C++ because I wanted to.
+
 ## 2022
 
 I started this year to begin learning python, some of the days will be done with C/C++ because I wanted to.
@@ -38,14 +42,3 @@ Contains some file functions.
 
 Contains standard functions and variables/defines I use for Advent of code.
 
-### Debug (`debug`)
-
-In here there are some default functions, that all have an on\of switch.
-
-### Queue (`queue`)
-
-This library has some basic queue functions.
-
-### Hash (`hash`)
-
-This library contains hash function, so I'm able to use a hash table in C.
