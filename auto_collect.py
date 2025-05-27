@@ -58,6 +58,6 @@ if(len(sys.argv) <= 3 and len(sys.argv) != 2):
 if pathlib.Path(f"{YEAR}{os.sep}{DAY}.{sys.argv[3]}").exists():
     exit(0)
 elif pathlib.Path(f"standard/{sys.argv[3]}.{sys.argv[3]}").exists():
-    shutil.copyfile("standard/py.py", f"{YEAR}{os.sep}{DAY}.{sys.argv[3]}")
+    shutil.copyfile(f"standard/{sys.argv[3]}.{sys.argv[3]}", f"{YEAR}{os.sep}{DAY}.{sys.argv[3]}")
 else:
     pathlib.Path(f"{YEAR}{os.sep}{DAY}.{sys.argv[3]}").touch(exist_ok=True)
