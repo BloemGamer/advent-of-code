@@ -28,7 +28,7 @@ if response.ok:
 else:
     print("Failed to download input:", response.status_code)
 
-if(len(sys.argv) < 3):
+if(len(sys.argv) <= 3):
     exit(0)
 
 if pathlib.Path(f"{YEAR}{os.sep}{DAY}.{sys.argv[3]}").exists():
