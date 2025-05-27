@@ -5,8 +5,9 @@ import pathlib
 import shutil
 import datetime
 
+today = datetime.date.today()
+
 if(len(sys.argv) <= 2):
-    today = datetime.date.today()
     if(today.month != 12):
         print("Not december")
         exit(1)
@@ -18,6 +19,15 @@ if(len(sys.argv) <= 2):
 else:
     YEAR = int(sys.argv[1])
     DAY = int(sys.argv[2])
+    if(YEAR > today.year):
+        print(f"this year is not ready: {YEAR} > {today.year}")
+        exit(1)
+    if(today.year == YEAR and DAY > today.day):
+        print(f"this day is not ready: {DAY} > {today.day}")
+        exit(1)
+    if(today.day > 25):
+        print("After day 25")
+        exit(1)
 
 os.makedirs(f"{YEAR}", exist_ok=True)
 os.makedirs(f"{YEAR}{os.sep}txt", exist_ok=True)
