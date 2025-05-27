@@ -3,17 +3,27 @@ import requests
 import dotenv
 import pathlib
 import shutil
+import datetime
 
-YEAR = int(sys.argv[1])
-DAY = int(sys.argv[2])
+if(len(sys.argv) <= 2):
+    today = datetime.date.today()
+    if(today.month != 12):
+        print("Not december")
+        exit(1)
+    if(today.day > 25):
+        print("After day 25")
+        exit(1)
+    YEAR = today.year
+    DAY = today.day
+else:
+    YEAR = int(sys.argv[1])
+    DAY = int(sys.argv[2])
 
 os.makedirs(f"{YEAR}", exist_ok=True)
 os.makedirs(f"{YEAR}{os.sep}txt", exist_ok=True)
 pathlib.Path(f"{YEAR}/txt/{DAY:02}.test1.txt").touch(exist_ok=True)
 pathlib.Path(f"{YEAR}/txt/{DAY:02}.test2.txt").touch(exist_ok=True)
 
-
-# Your session token here (store securely!)
 dotenv.load_dotenv()
 SESSION = os.getenv("AOC_SESSION")
 url = f"https://adventofcode.com/{YEAR}/day/{DAY}/input"
@@ -28,7 +38,7 @@ if response.ok:
 else:
     print("Failed to download input:", response.status_code)
 
-if(len(sys.argv) <= 3):
+if(len(sys.argv) <= 3 and len(sys.argv) != 2):
     exit(0)
 
 if pathlib.Path(f"{YEAR}{os.sep}{DAY}.{sys.argv[3]}").exists():
