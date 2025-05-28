@@ -7,7 +7,17 @@ import datetime
 
 today = datetime.date.today()
 
-def get_aoc_data(DAY = today.day, YEAR = today.year, FILE_TYPE = None):
+def get_aoc_data(DAY = today.day, YEAR = today.year, FILE_TYPE = None, *,\
+                 template_file = "template{SEP}template.{FILE_TYPE}",\
+                 new_file = "{YEAR}{SEP}{DAY}.{FILE_TYPE}",\
+                 txt_file = "{YEAR}{SEP}txt{SEP}{DAY:02}.txt",\
+                 test_txt_file = "{YEAR}/txt/{DAY:02}.test{index}.txt", amount_test_files = 2 \
+                 ):
+    TEMPLATE_FILE = template_file.format(FILE_TYPE = FILE_TYPE, YEAR = YEAR, DAY = DAY, SEP = os.sep)
+    NEW_FILE = new_file.format(FILE_TYPE = FILE_TYPE, YEAR = YEAR, DAY = DAY, SEP = os.sep)
+    TXT_FILE = txt_file.format(FILE_TYPE = FILE_TYPE, YEAR = YEAR, DAY = DAY, SEP = os.sep)
+
+
     # check if the given day is valid, and if no day is given, if today is valid
     if(YEAR > today.year):
         print(f"this year is not ready: {YEAR} > {today.year}")
@@ -26,8 +36,8 @@ def get_aoc_data(DAY = today.day, YEAR = today.year, FILE_TYPE = None):
     # make directories
     os.makedirs(f"{YEAR}", exist_ok=True)
     os.makedirs(f"{YEAR}{os.sep}txt", exist_ok=True)
-    pathlib.Path(f"{YEAR}/txt/{DAY:02}.test1.txt").touch(exist_ok=True)
-    pathlib.Path(f"{YEAR}/txt/{DAY:02}.test2.txt").touch(exist_ok=True)
+    for i in range(amount_test_files, 1):
+        pathlib.Path(test_txt_file.format(FILE_TYPE = FILE_TYPE, YEAR = YEAR, DAY = DAY, SEP = os.sep, i = i, index = i)).touch(exist_ok=True)
 
     # load the cookie/session thing
     dotenv.load_dotenv()
@@ -39,25 +49,25 @@ def get_aoc_data(DAY = today.day, YEAR = today.year, FILE_TYPE = None):
     # ask for the input from the server
     response = requests.get(url, cookies=cookies)
     if response.ok:
-        with open(f"{YEAR}/txt/{DAY:02}.txt", "w+") as f:
+        with open(TXT_FILE, "w+") as f:
             f.write(response.text)
-        print(f"Input downloaded: {YEAR}/txt/{DAY:02}.txt")
+        print(f"Input downloaded: {TXT_FILE}")
     else:
         print("Failed to download input:", response.status_code, response.text)
 
-    # copy the standard file, if that is asked, and exists, else, just make the file
+    # copy the template file, if that is asked, and exists, else, just make the file
     if(FILE_TYPE != None):
         exit(0)
-    if pathlib.Path(f"{YEAR}{os.sep}{DAY}.{FILE_TYPE}").exists():
+    if pathlib.Path(NEW_FILE).exists():
         exit(0)
-    elif pathlib.Path(f"standard/{FILE_TYPE}.{FILE_TYPE}").exists():
-        shutil.copyfile(f"standard/{FILE_TYPE}.{FILE_TYPE}", f"{YEAR}{os.sep}{DAY}.{FILE_TYPE}")
+    elif pathlib.Path(TEMPLATE_FILE).exists():
+        shutil.copyfile(TEMPLATE_FILE, NEW_FILE)
     else:
-        pathlib.Path(f"{YEAR}{os.sep}{DAY}.{FILE_TYPE}").touch(exist_ok=True)
+        pathlib.Path(NEW_FILE).touch(exist_ok=True)
 
 
 if __name__ == "__main__":
-    if(len(sys.argv) == 1):
+    if(len(sys.argv) == 1 or len(sys.argv) == 2 and len(sys.argv[1]) == 0):
         get_aoc_data();
         exit(0)
     day = today.day
@@ -85,9 +95,9 @@ if __name__ == "__main__":
             i += 1
 
     else:
-        if(len(sys.argv) >= 3):
-            file_type = sys.argv[3]
         if(len(sys.argv) > 3):
+            file_type = sys.argv[3]
+        if(len(sys.argv) == 3):
             year = int(sys.argv[1])
             day = int(sys.argv[2])
         elif len(sys.argv) == 2:
@@ -98,4 +108,4 @@ if __name__ == "__main__":
     print("file_type = ", file_type)
 
 
-    get_aoc_data(day, year, file_type)
+    get_aoc_data(DAY=day, YEAR=year, FILE_TYPE=file_type)
