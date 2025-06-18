@@ -4,14 +4,16 @@ import dotenv
 import pathlib
 import shutil
 import datetime
+import subprocess
 
 today = datetime.date.today()
 
 def get_aoc_data(DAY = today.day, YEAR = today.year, FILE_TYPE = None, *,\
                  template_file = "template{SEP}template.{FILE_TYPE}",\
-                 new_file = "{YEAR}{SEP}{DAY}.{FILE_TYPE}",\
+                 new_file = "{YEAR}{SEP}{DAY:02}.{FILE_TYPE}",\
                  txt_file = "{YEAR}{SEP}txt{SEP}{DAY:02}.txt",\
-                 test_txt_file = "{YEAR}/txt/{DAY:02}.test{index}.txt", amount_test_files = 2 \
+                 test_txt_file = "{YEAR}/txt/{DAY:02}.test{index}.txt", amount_test_files = 2, \
+                 auto_setup_rust = False \
                  ):
     TEMPLATE_FILE = template_file.format(FILE_TYPE = FILE_TYPE, YEAR = YEAR, DAY = DAY, SEP = os.sep)
     NEW_FILE = new_file.format(FILE_TYPE = FILE_TYPE, YEAR = YEAR, DAY = DAY, SEP = os.sep)
@@ -36,7 +38,7 @@ def get_aoc_data(DAY = today.day, YEAR = today.year, FILE_TYPE = None, *,\
     # make directories
     os.makedirs(f"{YEAR}", exist_ok=True)
     os.makedirs(f"{YEAR}{os.sep}txt", exist_ok=True)
-    for i in range(amount_test_files, 1):
+    for i in range(1, amount_test_files + 1):
         pathlib.Path(test_txt_file.format(FILE_TYPE = FILE_TYPE, YEAR = YEAR, DAY = DAY, SEP = os.sep, i = i, index = i)).touch(exist_ok=True)
 
     # load the cookie/session thing
@@ -56,7 +58,18 @@ def get_aoc_data(DAY = today.day, YEAR = today.year, FILE_TYPE = None, *,\
         print("Failed to download input:", response.status_code, response.text)
 
     # copy the template file, if that is asked, and exists, else, just make the file
-    if(FILE_TYPE != None):
+    if(FILE_TYPE == None):
+        exit(0)
+    if(auto_setup_rust == True and FILE_TYPE == "rs"):
+        if pathlib.Path(NEW_FILE).exists():
+            pass
+        elif pathlib.Path(TEMPLATE_FILE).exists():
+            shutil.copyfile(TEMPLATE_FILE, NEW_FILE)
+        else:
+            pathlib.Path(NEW_FILE).touch(exist_ok=True)
+        subprocess.run(["./setup_rust.sh", str(YEAR), f"{DAY:02}"])
+
+
         exit(0)
     if pathlib.Path(NEW_FILE).exists():
         exit(0)
@@ -64,6 +77,9 @@ def get_aoc_data(DAY = today.day, YEAR = today.year, FILE_TYPE = None, *,\
         shutil.copyfile(TEMPLATE_FILE, NEW_FILE)
     else:
         pathlib.Path(NEW_FILE).touch(exist_ok=True)
+
+
+
 
 
 if __name__ == "__main__":
@@ -108,4 +124,4 @@ if __name__ == "__main__":
     print("file_type = ", file_type)
 
 
-    get_aoc_data(DAY=day, YEAR=year, FILE_TYPE=file_type)
+    get_aoc_data(DAY=day, YEAR=year, FILE_TYPE=file_type, auto_setup_rust=True)
