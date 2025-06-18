@@ -17,3 +17,9 @@ __pycache__
 *.sh
 .cache
 .env
+Cargo.*
+*.json
+target
+template
+main.rs
+gen_compile_json.py
