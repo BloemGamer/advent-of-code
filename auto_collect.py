@@ -113,7 +113,7 @@ if __name__ == "__main__":
     else:
         if(len(sys.argv) > 3):
             file_type = sys.argv[3]
-        if(len(sys.argv) == 3):
+        if(len(sys.argv) >= 3):
             year = int(sys.argv[1])
             day = int(sys.argv[2])
         elif len(sys.argv) == 2:
