@@ -8,7 +8,7 @@ _There is a possibility that some day's don't work anymore because I updated the
 
 ## 2019
 
-I started this year because of this year had some intcode puzzles, and I wanted to try them.
+I started this year because of this year had some intcode puzzles, and I wanted to try them. And now want to learn rust, so am trying to finish the year.
 
 ## 2021
 
