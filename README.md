@@ -28,13 +28,3 @@ _Before 2024 started, I had finished day 10. After this, I am first going to com
 
 This year is the first year I'm starting when it releases.
 
-## Libraries
-
-### Bloem (`bloem`)
-
-Contains some file functions.
-
-### Adventofcode (`advent of code`)
-
-Contains standard functions and variables/defines I use for Advent of code.
-
