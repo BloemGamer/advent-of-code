@@ -1,9 +1,12 @@
-use std::{collections::VecDeque, fs, io::{self, BufRead}};
+use std::{cell::RefCell, collections::VecDeque, fs, io::{self, BufRead}};
 
-#[derive(Debug)]
+// 499, to high
+// 485, to low
+
+#[derive(Debug, Clone)]
 struct Solver
 {
-    paths: ShortestPaths,
+    length: usize,
     map: Vec<Vec<usize>>,
     start: (usize, usize),
     end: (usize, usize),
@@ -13,23 +16,7 @@ impl Solver
 {
     fn new() -> Self
     {
-        Self { paths: ShortestPaths::new(), start: (0, 0), end: (0, 0), map: Vec::new() }
-    }
-}
-
-#[derive(Debug)]
-struct ShortestPaths
-{
-    lenght: usize,
-    paths: Vec<Vec<Vec<usize>>>,
-}
-
-
-impl ShortestPaths
-{
-    fn new() -> Self
-    {
-        Self { lenght: usize::MAX, paths: Vec::new() }
+        Self { length: 0, start: (0, 0), end: (0, 0), map: Vec::new() }
     }
 }
 
@@ -54,9 +41,18 @@ pub fn setup(year: &str, day: &str)
 fn part1(file: &Vec<String>)
 {
     let mut solver = setup_solver(&file);
-    match run_solver(&mut solver)
+    match 
     {
-        Ok(_) => println!("Part 1: {}", solver.paths.lenght),
+        let mut queue: VecDeque<((usize, usize), usize, (i64, i64))> = VecDeque::new();
+        queue.push_back((((solver.start.0 + 0, solver.start.1 + 1)), 1, (0, 1)));
+        queue.push_back((((solver.start.0 - 1, solver.start.1 + 0)), 1001, (-1, 0)));
+        solver.map[solver.start.0][solver.start.1] = 2;
+        solver.map[solver.start.0 + 0][solver.start.1 + 1] = 1;
+        solver.map[solver.start.0 - 1][solver.start.1 + 0] = 1001;
+        solve(&mut solver, queue)
+    }
+    {
+        Ok(_) => println!("Part 1: {}", solver.length),
         Err(_) =>
         {
             for row in &solver.map
@@ -77,10 +73,47 @@ fn part1(file: &Vec<String>)
     }
 }
 
-fn part2(_file: &Vec<String>)
+fn part2(file: &Vec<String>)
 {
+    let solver_base = setup_solver(&file);
+    let mut solver1 = 
+    {
+        let mut solver = solver_base.clone();
+        let mut queue: VecDeque<((usize, usize), usize, (i64, i64))> = VecDeque::new();
+        queue.push_back((((solver.start.0 + 0, solver.start.1 + 1)), 1, (0, 1)));
+        queue.push_back((((solver.start.0 - 1, solver.start.1 + 0)), 1001, (-1, 0)));
+        solver.map[solver.start.0][solver.start.1] = 2;
+        solver.map[solver.start.0 + 0][solver.start.1 + 1] = 1;
+        solver.map[solver.start.0 - 1][solver.start.1 + 0] = 1001;
+        solve(&mut solver, queue).unwrap();
+        solver.map[solver.start.0][solver.start.1] = 0;
+        solver
+    };
+    let mut queue: VecDeque<((usize, usize), usize, (i64, i64))> = VecDeque::new();
+    //queue.push_back((((solver.start.0 + 0, solver.start.1 + 1)), 1, (0, 1)));
+    queue.push_back((((solver1.start.0 - 1, solver1.start.1 + 0)), 1001, (-1, 0)));
 
+    let new_map = find_all_paths(&mut solver1);
+    
+    let mut count: u64 = 0;
+    for row in &new_map
+    {
+        for &val in row
+        {
+            let _ch = match val
+            {
+                0 => '.',
+                usize::MAX => '#',
+                _ => {count += 1; 'O'},
+            };
+            //print!("{}", _ch);
+        }
+        //println!();
+    }
+
+    println!("Part 2: {count}");
 }
+
 
 fn setup_solver(map_given: &Vec<String>) -> Solver
 {
@@ -108,16 +141,8 @@ fn setup_solver(map_given: &Vec<String>) -> Solver
     solver
 }
 
-fn run_solver(solver: &mut Solver) -> Result<(), ()>
+fn solve(solver: &mut Solver, mut queue: VecDeque<((usize, usize), usize, (i64, i64))>) -> Result<(), ()>
 {
-    let mut queue: VecDeque<((usize, usize), usize, (i64, i64))> = VecDeque::new();
-    queue.push_back((((solver.start.0 + 0, solver.start.1 + 1)), 1, (0, 1)));
-    queue.push_back((((solver.start.0 - 1, solver.start.1 + 0)), 1001, (-1, 0)));
-    solver.map[solver.start.0][solver.start.1] = 2;
-    solver.map[solver.start.0 + 0][solver.start.1 + 1] = 1;
-    solver.map[solver.start.0 - 1][solver.start.1 + 0] = 1001;
-
-
     while !queue.is_empty()
     {
         let ((y, x), length, (diry, dirx)) = queue.pop_back().ok_or(())?;
@@ -145,7 +170,88 @@ fn run_solver(solver: &mut Solver) -> Result<(), ()>
         }
     }
 
-    solver.paths.lenght = solver.map[solver.end.0][solver.end.1];
+    solver.length = solver.map[solver.end.0][solver.end.1];
 
     Ok(())
+}
+
+
+
+fn find_all_paths(solver: &mut Solver) -> Vec<Vec<usize>>
+{
+    let map: std::rc::Rc<RefCell<Vec<Vec<usize>>>> = std::rc::Rc::new(RefCell::new(vec![vec![0; solver.map.len()]; solver.map[1].len()]));
+    {
+        let mut map_tmp = map.borrow_mut();
+        map_tmp[solver.end.0][solver.end.1] = solver.length;
+    }
+    
+    step_straight(&map, &solver.map, solver.end.0, solver.end.1, 1, 0, solver.length);
+    step_straight(&map, &solver.map, solver.end.0, solver.end.1, 0, -1, solver.length);
+
+
+    let mut map_ret = map.take();
+    map_ret[solver.start.0][solver.start.1] = 1;
+    map_ret
+}
+
+fn step_straight(map_rc: &std::rc::Rc<RefCell<Vec<Vec<usize>>>>, read_map: &Vec<Vec<usize>>, y: usize, x: usize, diry: i64, dirx: i64, length: usize)
+{
+    if length == 0 {return}
+    let next = read_map[(y as i64 + diry) as usize][(x as i64 + dirx) as usize];
+    if next == length - 1
+    {
+        {
+            let mut map = map_rc.borrow_mut();
+            map[(y as i64 + diry) as usize][(x as i64 + dirx) as usize] = length - 1;
+        }
+        step_straight(map_rc, read_map, (y as i64 + diry) as usize, (x as i64 + dirx) as usize, diry, dirx, length - 1);
+    }
+
+    else if next == length - 1001
+    {
+        {
+            let mut map = map_rc.borrow_mut();
+            map[(y as i64 + diry) as usize][(x as i64 + dirx) as usize] = length - 1001;
+        }
+        step_not_straight(map_rc, read_map, (y as i64 + diry) as usize, (x as i64 + dirx) as usize, diry, dirx, length - 1001);
+    }
+}
+
+
+fn step_not_straight(map_rc: &std::rc::Rc<RefCell<Vec<Vec<usize>>>>, read_map: &Vec<Vec<usize>>, y: usize, x: usize, diry: i64, dirx: i64, length: usize)
+{
+    if length == 0
+    {
+        let mut map = map_rc.borrow_mut();
+        map[y as usize][x as usize] = 1;
+        return;
+    }
+    let next1 = read_map[(y as i64 + diry) as usize][(x as i64 + dirx) as usize];
+    if next1 == length + 999
+    {
+        {
+            let mut map = map_rc.borrow_mut();
+            map[(y as i64 + diry) as usize][(x as i64 + dirx) as usize] = length - 1;
+        }
+        step_straight(map_rc, read_map, (y as i64 + diry) as usize, (x as i64 + dirx) as usize, diry, dirx, length + 999);
+    }
+    let next2 = read_map[(y as i64 + dirx) as usize][(x as i64 + diry) as usize];
+    if next2 == length - 1
+    {
+        {
+            let mut map = map_rc.borrow_mut();
+            map[(y as i64 + dirx) as usize][(x as i64 + diry) as usize] = length - 1;
+        }
+        step_straight(map_rc, read_map, (y as i64 + dirx) as usize, (x as i64 + diry) as usize, dirx, diry, length - 1);
+    }
+    
+    let next3 = read_map[(y as i64 - dirx) as usize][(x as i64 - diry) as usize];
+    if next3 == length - 1
+    {
+        {
+            let mut map = map_rc.borrow_mut();
+            map[(y as i64 - dirx) as usize][(x as i64 - diry) as usize] = length - 1;
+        }
+        step_straight(map_rc, read_map, (y as i64 - dirx) as usize, (x as i64 - diry) as usize, -dirx, -diry, length - 1);
+    }
 }
