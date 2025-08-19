@@ -1,4 +1,5 @@
 use std::{cell::RefCell, collections::VecDeque, fs, io::{self, BufRead}};
+const TURN_COST: usize = 1000;
 
 // 499, to high
 // 485, to low
@@ -45,10 +46,10 @@ fn part1(file: &Vec<String>)
     {
         let mut queue: VecDeque<((usize, usize), usize, (i64, i64))> = VecDeque::new();
         queue.push_back((((solver.start.0 + 0, solver.start.1 + 1)), 1, (0, 1)));
-        queue.push_back((((solver.start.0 - 1, solver.start.1 + 0)), 1001, (-1, 0)));
+        queue.push_back((((solver.start.0 - 1, solver.start.1 + 0)), 1 + TURN_COST, (-1, 0)));
         solver.map[solver.start.0][solver.start.1] = 2;
         solver.map[solver.start.0 + 0][solver.start.1 + 1] = 1;
-        solver.map[solver.start.0 - 1][solver.start.1 + 0] = 1001;
+        solver.map[solver.start.0 - 1][solver.start.1 + 0] = 1 + TURN_COST;
         solve(&mut solver, queue)
     }
     {
@@ -81,17 +82,17 @@ fn part2(file: &Vec<String>)
         let mut solver = solver_base.clone();
         let mut queue: VecDeque<((usize, usize), usize, (i64, i64))> = VecDeque::new();
         queue.push_back((((solver.start.0 + 0, solver.start.1 + 1)), 1, (0, 1)));
-        queue.push_back((((solver.start.0 - 1, solver.start.1 + 0)), 1001, (-1, 0)));
+        queue.push_back((((solver.start.0 - 1, solver.start.1 + 0)), 1 + TURN_COST, (-1, 0)));
         solver.map[solver.start.0][solver.start.1] = 2;
         solver.map[solver.start.0 + 0][solver.start.1 + 1] = 1;
-        solver.map[solver.start.0 - 1][solver.start.1 + 0] = 1001;
+        solver.map[solver.start.0 - 1][solver.start.1 + 0] = 1 + TURN_COST;
         solve(&mut solver, queue).unwrap();
         solver.map[solver.start.0][solver.start.1] = 0;
         solver
     };
     let mut queue: VecDeque<((usize, usize), usize, (i64, i64))> = VecDeque::new();
     //queue.push_back((((solver.start.0 + 0, solver.start.1 + 1)), 1, (0, 1)));
-    queue.push_back((((solver1.start.0 - 1, solver1.start.1 + 0)), 1001, (-1, 0)));
+    queue.push_back((((solver1.start.0 - 1, solver1.start.1 + 0)), 1 + TURN_COST, (-1, 0)));
 
     let new_map = find_all_paths(&mut solver1);
     
@@ -156,17 +157,17 @@ fn solve(solver: &mut Solver, mut queue: VecDeque<((usize, usize), usize, (i64, 
         }
 
         let next2 = solver.map[(y as i64 + dirx) as usize][(x as i64 + diry) as usize];
-        if (next2 > length + 1001 || next2 == 0) && next2 != usize::MAX
+        if (next2 > length + 1 + TURN_COST || next2 == 0) && next2 != usize::MAX
         {
-            solver.map[(y as i64 + dirx) as usize][(x as i64 + diry) as usize] = length + 1001;
-            queue.push_back(((((y as i64 + dirx) as usize, (x as i64 + diry) as usize)), length + 1001, (dirx, diry)));
+            solver.map[(y as i64 + dirx) as usize][(x as i64 + diry) as usize] = length + 1 + TURN_COST;
+            queue.push_back(((((y as i64 + dirx) as usize, (x as i64 + diry) as usize)), length + 1 + TURN_COST, (dirx, diry)));
         }
 
         let next3 = solver.map[(y as i64 - dirx) as usize][(x as i64 - diry) as usize];
-        if (next3 > length + 1001 || next3 == 0) && next3 != usize::MAX
+        if (next3 > length + 1 + TURN_COST || next3 == 0) && next3 != usize::MAX
         {
-            solver.map[(y as i64 - dirx) as usize][(x as i64 - diry) as usize] = length + 1001;
-            queue.push_back(((((y as i64 - dirx) as usize, (x as i64 - diry) as usize)), length + 1001, (-dirx, -diry)));
+            solver.map[(y as i64 - dirx) as usize][(x as i64 - diry) as usize] = length + 1 + TURN_COST;
+            queue.push_back(((((y as i64 - dirx) as usize, (x as i64 - diry) as usize)), length + 1 + TURN_COST, (-dirx, -diry)));
         }
     }
 
@@ -207,13 +208,13 @@ fn step_straight(map_rc: &std::rc::Rc<RefCell<Vec<Vec<usize>>>>, read_map: &Vec<
         step_straight(map_rc, read_map, (y as i64 + diry) as usize, (x as i64 + dirx) as usize, diry, dirx, length - 1);
     }
 
-    else if next == length - 1001
+    else if next == length - (1 + TURN_COST)
     {
         {
             let mut map = map_rc.borrow_mut();
-            map[(y as i64 + diry) as usize][(x as i64 + dirx) as usize] = length - 1001;
+            map[(y as i64 + diry) as usize][(x as i64 + dirx) as usize] = length - 1 + TURN_COST;
         }
-        step_not_straight(map_rc, read_map, (y as i64 + diry) as usize, (x as i64 + dirx) as usize, diry, dirx, length - 1001);
+        step_not_straight(map_rc, read_map, (y as i64 + diry) as usize, (x as i64 + dirx) as usize, diry, dirx, length - (1 + TURN_COST));
     }
 }
 
@@ -227,7 +228,7 @@ fn step_not_straight(map_rc: &std::rc::Rc<RefCell<Vec<Vec<usize>>>>, read_map: &
         return;
     }
     let next1 = read_map[(y as i64 + diry) as usize][(x as i64 + dirx) as usize];
-    if next1 == length + 999
+    if next1 == length + (TURN_COST - 1)
     {
         {
             let mut map = map_rc.borrow_mut();
