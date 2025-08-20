@@ -1,5 +1,5 @@
 use std::{cell::RefCell, collections::VecDeque, fs, io::{self, BufRead}};
-const TURN_COST: usize = 1000;
+const TURN_COST: usize = 0;
 
 // 499, to high
 // 485, to low
@@ -36,7 +36,7 @@ pub fn setup(year: &str, day: &str)
     }
 
     let _ = part1(&file_v);
-    let _ = part2(&file_v);
+    //let _ = part2(&file_v);
 }
 
 fn part1(file: &Vec<String>)
@@ -228,7 +228,7 @@ fn step_not_straight(map_rc: &std::rc::Rc<RefCell<Vec<Vec<usize>>>>, read_map: &
         return;
     }
     let next1 = read_map[(y as i64 + diry) as usize][(x as i64 + dirx) as usize];
-    if next1 == length + (TURN_COST - 1)
+    if next1 == length - 1 + TURN_COST
     {
         {
             let mut map = map_rc.borrow_mut();
