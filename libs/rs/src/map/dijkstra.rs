@@ -24,7 +24,7 @@ pub use dijkstra_min_len;
 
 /// finds the intersections (or turns) of a given maze, and also pushes [`start`] and [`end`] to the vec so they can be find by the algoritms
 #[macro_export]
-macro_rules! find_intersectionscustomization
+macro_rules! find_intersections
 {
     ($map:ident, $start:expr, $end:expr => $intersection_fn:expr => $ID:ty, $neighbors:path, $on_intersection:expr ) =>
     {{
