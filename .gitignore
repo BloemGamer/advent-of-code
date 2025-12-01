@@ -24,6 +24,7 @@ target
 template
 standard_functions
 old
+.idea
 
 main.rs
 gen_compile_json.py
