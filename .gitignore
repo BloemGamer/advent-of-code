@@ -27,5 +27,7 @@ standard_functions
 old
 .idea
 
+.clangd
+
 main.rs
 gen_compile_json.py
