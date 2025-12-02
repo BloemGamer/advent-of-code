@@ -43,22 +43,34 @@ fn part2(file: &Vec<String>)
 	let tmp: Vec<&str> = file[0].split(",").collect();
 	let nums: Vec<Vec<&str>> = tmp.iter().map(|f|f.split("-").collect::<Vec<&str>>()).collect();
 
-	let re = fancy_regex::Regex::new(r"^(\d+)\1+$").unwrap();
+
 	for num in nums
 	{
 		let n1: i64 = num[0].parse().unwrap();
 		let n2: i64 = num[1].parse().unwrap();
-		for n in n1..=n2
+		'main_floop: for n in n1..=n2
 		{
 			let str: String = n.to_string();
-			if re.is_match(&str).unwrap()
+			'floop: for len in 1..str.len()
 			{
+				if str.len() % len != 0
+				{
+					continue 'floop;
+				}
+				let s1: &str = &str[..len];
+				for i in 1..str.len() / len
+				{
+					let s2: &str = &str[i * len.. (i + 1) * len];
+					if s1 != s2
+					{
+						continue 'floop;
+					}
+				}
 				answer += n;
-				continue;
+				continue 'main_floop;
 			}
 		}
 	}
-
 	println!("Part 2: {}", answer);
 }
 
