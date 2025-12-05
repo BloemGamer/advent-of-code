@@ -8,6 +8,8 @@ import shutil
 import datetime
 import subprocess
 
+from setup_rust import setup_rust
+
 today = datetime.date.today()
 
 def get_aoc_data(DAY = today.day, YEAR = today.year, FILE_TYPE = None, *,\
@@ -63,13 +65,7 @@ def get_aoc_data(DAY = today.day, YEAR = today.year, FILE_TYPE = None, *,\
 	if(FILE_TYPE == None):
 		exit(0)
 	if(auto_setup_rust == True and FILE_TYPE == "rs"):
-		if pathlib.Path(NEW_FILE).exists():
-			pass
-		elif pathlib.Path(TEMPLATE_FILE).exists():
-			shutil.copyfile(TEMPLATE_FILE, NEW_FILE)
-		else:
-			pathlib.Path(NEW_FILE).touch(exist_ok=True)
-		subprocess.run(["./setup_rust.sh", str(YEAR), f"{DAY:02}"])
+		setup_rust(int(YEAR), int(DAY))
 
 
 		exit(0)
