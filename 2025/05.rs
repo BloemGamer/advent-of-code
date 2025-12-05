@@ -3,6 +3,8 @@ use std::{
 	ops::RangeInclusive,
 	time::Instant,
 };
+use aoc;
+
 
 
 pub fn setup(year: &str, day: &str)
@@ -19,15 +21,27 @@ pub fn setup(year: &str, day: &str)
 
 
 	let time_p1 = Instant::now();
-	'floop: for f in &file[start_id..]
+	let mut nums: Vec<i64> = Vec::new();
+	for f in &file[start_id..]
 	{
-		for r in &ranges
+		nums.push(f.parse::<i64>().unwrap());
+	}
+	nums.sort();
+	let mut i = 0;
+	'floop: for num in &nums
+	{
+		while num > ranges[i].end()
 		{
-			if r.contains(&f.parse::<i64>().unwrap())
+			i += 1;
+			if i >= ranges.len()
 			{
-				answer_p1 += 1;
-				continue 'floop;
+				break 'floop;
 			}
+		}
+		if ranges[i].contains(num)
+		{
+			answer_p1 += 1;
+			continue 'floop;
 		}
 	}
 	let time_used_p1 = time_p1.elapsed();
