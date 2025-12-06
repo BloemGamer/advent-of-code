@@ -6,7 +6,7 @@ import pathlib
 
 def setup_rust(year: int, day: int) -> None:
 	TEMPLATE_FILE: str = "template/template.rs"
-	rust_file: str = f"{year}/{day:02d}.rs/"
+	rust_file: str = f"{year}/{day:02d}.rs"
 	with open("Cargo.toml", "r") as cargo_toml:
 		file = cargo_toml.read()
 	reg: str = '\npath = \".*\"\n'
@@ -21,7 +21,7 @@ def setup_rust(year: int, day: int) -> None:
 		return
 	if not pathlib.Path(TEMPLATE_FILE).exists():
 		return
-	with open(f"{year}/{day:02d}.rs", "r") as file:
+	with open(TEMPLATE_FILE, "r") as file:
 		new_rust_file: str = file.read()
 
 	new_rust_file.replace("{day}", f"{day:02}")
