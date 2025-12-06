@@ -28,6 +28,7 @@ old
 .idea
 
 .clangd
+.nvim.lua
 
 main.rs
 gen_compile_json.py
