@@ -1,18 +1,19 @@
 use std::{
 	cmp::Ord,
-	ops::RangeInclusive,
 	time::Instant,
+	fs,
 };
-use aoc;
 
 
-
-pub fn setup(year: &str, day: &str)
+fn main()
 {
 	let time_file = Instant::now();
 	let mut answer_p1: i64 = 0;
 	let mut answer_p2: i64 = 0;
-	let file: Vec<String> = aoc::read_file(year, day, aoc::WhichFile::Test(2));
+
+	let text = fs::read_to_string("2025/txt/05.test2.txt").unwrap();
+	let file: Vec<&str> = text.lines().collect();
+
 	let time_used_file = time_file.elapsed();
 
 	let time_ranges = Instant::now();
@@ -22,15 +23,15 @@ pub fn setup(year: &str, day: &str)
 
 	let time_p1 = Instant::now();
 	let mut nums: Vec<i64> = Vec::new();
-	for f in &file[start_id..]
+	for f in &file[start_id..file.len() - 1]
 	{
-		nums.push(f.parse::<i64>().unwrap());
+		nums.push(f.trim_end_matches('\n').parse().unwrap());
 	}
-	nums.sort();
+	nums.sort_unstable();
 	let mut i = 0;
-	'floop: for num in &nums
+	'floop: for &num in &nums
 	{
-		while num > ranges[i].end()
+		while num > ranges[i].1
 		{
 			i += 1;
 			if i >= ranges.len()
@@ -38,7 +39,7 @@ pub fn setup(year: &str, day: &str)
 				break 'floop;
 			}
 		}
-		if ranges[i].contains(num)
+		if ranges[i].0 <= num
 		{
 			answer_p1 += 1;
 			continue 'floop;
@@ -47,18 +48,16 @@ pub fn setup(year: &str, day: &str)
 	let time_used_p1 = time_p1.elapsed();
 
 	let time_p2 = Instant::now();
-	for a in &ranges
-	{
-		answer_p2 += a.end() - a.start() + 1;
-	}
+	ranges.iter().for_each(|&(b, e)| answer_p2 += e - b + 1 );
 	let time_used_p2 = time_p2.elapsed();
+
 	let time_used_total = time_file.elapsed();
 
-	println!("File:   {:5}ms", time_used_file.as_millis());
-	println!("Ranges: {:5}ms", time_used_ranges.as_millis());
-	println!("Part 1: {:5}ms", time_used_p1.as_millis());
-	println!("Part 2: {:5}ms", time_used_p2.as_millis());
-	println!("Total:  {:5}ms", time_used_total.as_millis());
+	println!("File:   {:7}us", time_used_file.as_micros());
+	println!("Ranges: {:7}us", time_used_ranges.as_micros());
+	println!("Part 1: {:7}us", time_used_p1.as_micros());
+	println!("Part 2: {:7}us", time_used_p2.as_micros());
+	println!("Total:  {:7}us", time_used_total.as_micros());
 
 	println!();
 
@@ -66,10 +65,10 @@ pub fn setup(year: &str, day: &str)
 	println!("Part 2: {}", answer_p2);
 }
 
-fn get_ranges(file: &Vec<String>) -> (usize, Vec<RangeInclusive<i64>>)
+#[inline(always)]
+fn get_ranges(file: &Vec<&str>) -> (usize, Vec<(i64, i64)>)
 {
-	let mut highest_id: i64 = 0;
-	let mut ranges: Vec<RangeInclusive<i64>> = Vec::new();
+	let mut ranges: Vec<(i64, i64)> = Vec::new();
 	let mut end_ranges = 0;
 
 	for (i,f) in file.iter().enumerate()
@@ -79,25 +78,24 @@ fn get_ranges(file: &Vec<String>) -> (usize, Vec<RangeInclusive<i64>>)
 			end_ranges = i;
 			break;
 		}
-		let s: Vec<&str> = f.split("-").collect();
-		ranges.push(s[0].parse().unwrap()..=s[1].parse().unwrap());
-		highest_id = i64::max(highest_id, s[1].parse().unwrap())
+
+		let s: (&str, &str) = f.split_once("-").unwrap();
+		ranges.push((s.0.parse().unwrap(),s.1.parse().unwrap()));
 	}
 
-	ranges.sort_by(|a, b| i64::cmp(a.start(), b.start()));
+	ranges.sort_unstable_by_key(|a| a.0);
 
-	let mut allowed: Vec<RangeInclusive<i64>> = vec![ranges[0].clone()];
+	let mut allowed: Vec<(i64, i64)> = vec![(ranges[0].0, ranges[0].1)];
 
 	for r in &ranges[1..]
 	{
-		let last: &mut std::ops::RangeInclusive<i64> = allowed.last_mut().unwrap();
-		if *r.start() <= *last.end()
+		let last: &mut (i64, i64) = allowed.last_mut().unwrap();
+		if r.0 <= last.1
 		{
-			let new_end = i64::max(*last.end(),*r.end());
-			*last = *last.start()..=new_end;
+			last.1 = i64::max(last.1,r.1);
 			continue;
 		}
-		allowed.push(r.clone());
+		allowed.push((r.0, r.1));
 	}
 	return (end_ranges + 1, allowed);
 }
