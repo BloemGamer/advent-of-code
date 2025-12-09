@@ -10,10 +10,7 @@ def setup_rust(year: int, day: int) -> None:
 	with open("Cargo.toml", "r") as cargo_toml:
 		file = cargo_toml.read()
 	reg: str = '\npath = \".*\"\n'
-	match = re.match(reg, file)
-	print(match)
 	new_cargo_toml: str = re.sub(reg, f'\npath = \"{year}/{day:02d}.rs\"\n', file)
-	print(new_cargo_toml)
 	with open("Cargo.toml", "w") as cargo_toml:
 		cargo_toml.write(new_cargo_toml)
 
@@ -24,8 +21,8 @@ def setup_rust(year: int, day: int) -> None:
 	with open(TEMPLATE_FILE, "r") as file:
 		new_rust_file: str = file.read()
 
-	new_rust_file.replace("{day}", f"{day:02}")
-	new_rust_file.replace("{year}", f"{year}")
+	new_rust_file = new_rust_file.replace("{day}", f"{day:02}")
+	new_rust_file = new_rust_file.replace("{year}", f"{year}")
 
 	with open(rust_file, "w+") as file:
 		file.write(new_rust_file)
