@@ -28,3 +28,6 @@ _Before 2024 started, I had finished day 10. After this, I am first going to com
 
 This year is the first year I'm starting when it releases.
 
+## 2025
+
+This year I fully completed each day within the day
